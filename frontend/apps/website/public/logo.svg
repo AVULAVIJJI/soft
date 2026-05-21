@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0066FF"/>
+      <stop offset="100%" style="stop-color:#00C2FF"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF"/>
+      <stop offset="100%" style="stop-color:#CCD6F6"/>
+    </linearGradient>
+  </defs>
+  <!-- Shield icon -->
+  <polygon points="28,8 52,8 60,14 60,38 40,54 28,54 8,38 8,14" 
+           fill="url(#shieldGrad)" opacity="0.15" stroke="url(#shieldGrad)" stroke-width="1.5"/>
+  <!-- S lettermark inside shield -->
+  <text x="34" y="38" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" 
+        fill="url(#shieldGrad)" text-anchor="middle">S</text>
+  <!-- Circuit dots -->
+  <circle cx="8" cy="14" r="2.5" fill="#0066FF" opacity="0.7"/>
+  <circle cx="60" cy="14" r="2.5" fill="#00C2FF" opacity="0.7"/>
+  <circle cx="8" cy="38" r="2.5" fill="#0066FF" opacity="0.7"/>
+  <circle cx="60" cy="38" r="2.5" fill="#00C2FF" opacity="0.7"/>
+  <!-- Company name -->
+  <text x="75" y="32" font-family="Arial Black, sans-serif" font-size="17" font-weight="900" 
+        fill="url(#textGrad)" letter-spacing="1.5">SOFTMASTER</text>
+  <!-- Tagline -->
+  <text x="75" y="48" font-family="Arial, sans-serif" font-size="9" font-weight="400" 
+        fill="#6B7FA3" letter-spacing="3">TECHNOLOGY SOLUTIONS</text>
+</svg>

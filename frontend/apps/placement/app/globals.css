@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #0A1628;
+  --electric: #0066FF;
+  --accent: #00D4FF;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b; }
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+}
+.btn-secondary {
+  @apply bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-2.5 rounded-lg border border-gray-200 transition-all duration-200;
+}
+.card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+}
+.input-field {
+  @apply w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+}
+.badge-success { @apply bg-green-100 text-green-700 text-xs font-medium px-2.5 py-0.5 rounded-full; }
+.badge-warning { @apply bg-yellow-100 text-yellow-700 text-xs font-medium px-2.5 py-0.5 rounded-full; }
+.badge-error   { @apply bg-red-100 text-red-700 text-xs font-medium px-2.5 py-0.5 rounded-full; }
+.badge-info    { @apply bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full; }
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #0066FF, #00D4FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}

@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background-color: #030712; color: #e5e7eb; }
+.sidebar { width: 260px; min-height: 100vh; background: #0a0f1e; border-right: 1px solid #1a2740; }
+.main-content { flex: 1; background: #030712; }
+.stat-card { background: #0d1730; border: 1px solid #1a2740; border-radius: 12px; padding: 24px; }
+.chart-card { background: #0d1730; border: 1px solid #1a2740; border-radius: 12px; padding: 24px; }

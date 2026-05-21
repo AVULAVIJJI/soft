@@ -1,0 +1,191 @@
+# ============================================================
+# SOFTMASTER Enterprise Platform - Docker Compose
+# Run: docker-compose up -d
+# ============================================================
+
+version: "3.9"
+
+services:
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: softmaster_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME:-softmaster_db}
+      POSTGRES_USER: ${DB_USER:-softmaster_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-change_this_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - softmaster_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-softmaster_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: softmaster_redis
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD:-}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - softmaster_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend.Dockerfile
+    container_name: softmaster_backend
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - APP_ENV=${APP_ENV:-production}
+    env_file:
+      - .env
+    volumes:
+      - ./backend/uploads:/app/uploads
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - softmaster_network
+
+  # Main Website (Next.js)
+  website:
+    build:
+      context: ./frontend/apps/website
+      dockerfile: ../../../docker/frontend.Dockerfile
+    container_name: softmaster_website
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    networks:
+      - softmaster_network
+
+  # Academy Portal (Next.js)
+  academy:
+    build:
+      context: ./frontend/apps/academy
+      dockerfile: ../../../docker/frontend.Dockerfile
+    container_name: softmaster_academy
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3001:3000"
+    networks:
+      - softmaster_network
+
+  # Jobs Portal (Next.js)
+  jobs:
+    build:
+      context: ./frontend/apps/jobs
+      dockerfile: ../../../docker/frontend.Dockerfile
+    container_name: softmaster_jobs
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3002:3000"
+    networks:
+      - softmaster_network
+
+  # Admin Dashboard (Next.js)
+  admin:
+    build:
+      context: ./frontend/apps/admin
+      dockerfile: ../../../docker/frontend.Dockerfile
+    container_name: softmaster_admin
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3003:3000"
+    networks:
+      - softmaster_network
+
+  # Client Portal (Next.js)
+  client:
+    build:
+      context: ./frontend/apps/client
+      dockerfile: ../../../docker/frontend.Dockerfile
+    container_name: softmaster_client
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3004:3000"
+    networks:
+      - softmaster_network
+
+  # ERP Workspace (Next.js)
+  workspace:
+    build:
+      context: ./frontend/apps/workspace
+      dockerfile: ../../../docker/frontend.Dockerfile
+    container_name: softmaster_workspace
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3005:3000"
+    networks:
+      - softmaster_network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: softmaster_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deployment/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deployment/nginx/sites:/etc/nginx/conf.d:ro
+      - ./deployment/ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - backend
+      - website
+      - academy
+      - jobs
+      - admin
+      - client
+      - workspace
+    networks:
+      - softmaster_network
+
+volumes:
+  postgres_data:
+  redis_data:
+  nginx_logs:
+
+networks:
+  softmaster_network:
+    driver: bridge

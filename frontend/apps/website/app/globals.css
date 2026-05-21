@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #050C1A;
+  --color-surface: #0D1730;
+  --color-border: #1A2740;
+  --color-primary: #0066FF;
+  --color-cyan: #00C2FF;
+  --color-gold: #FFB800;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background-color: var(--color-bg); color: #CCD6F6; }
+
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(135deg, #0066FF, #00C2FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .glass {
+    background: rgba(13, 23, 48, 0.8);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(26, 39, 64, 0.8);
+  }
+  .glow {
+    box-shadow: 0 0 40px rgba(0, 102, 255, 0.2);
+  }
+}
