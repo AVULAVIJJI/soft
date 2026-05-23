@@ -1,7 +1,6 @@
 """
 Application Configuration - Reads from .env file
 """
-
 from pydantic_settings import BaseSettings
 from typing import List, Optional
 import secrets
@@ -14,7 +13,9 @@ class Settings(BaseSettings):
     APP_URL: str = "http://localhost:3000"
     API_URL: str = "http://localhost:8000"
 
-    DATABASE_URL: str = "postgresql://softmaster_user:Softmaster@2024@localhost:5432/softmaster_db"
+    # DATABASE_URL - set directly via environment variable (Render/Supabase)
+    DATABASE_URL: str = "postgresql://postgres:postgres123@localhost:5432/softmaster_db"
+
     DB_HOST: str = "localhost"
     DB_PORT: int = 5432
     DB_NAME: str = "softmaster_db"
@@ -49,18 +50,16 @@ class Settings(BaseSettings):
     SUPER_ADMIN_NAME: str = "Softmaster Admin"
 
     ALLOWED_HOSTS: str = "softmastertech.com,localhost,127.0.0.1,*"
-    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:8000"
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:3004,http://localhost:3005,http://localhost:3006,http://localhost:3007,http://localhost:8000"
 
     COMPANY_NAME: str = "Softmaster Technology Solutions Pvt Ltd"
     COMPANY_ADDRESS: str = "12-18, Indira Nagar Colony, Peerzadiguda, Hyderabad, Telangana - 500039"
     COMPANY_PHONE: str = "+91 8500910044"
     COMPANY_EMAIL: str = "contact@softmastertech.com"
 
-    def model_post_init(self, __context):
-        """Auto-build DATABASE_URL from components to handle special chars."""
-        from urllib.parse import quote_plus
-        safe_password = quote_plus(self.DB_PASSWORD)
-        self.DATABASE_URL = f"postgresql://{self.DB_USER}:{safe_password}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+    # ── model_post_init REMOVED ──
+    # It was overriding DATABASE_URL with localhost always!
+    # Now DATABASE_URL comes directly from environment variable (Render sets it)
 
     @property
     def ALLOWED_HOSTS_LIST(self) -> List[str]:
