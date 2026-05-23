@@ -58,10 +58,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
-
 API_PREFIX = "/api/v1"
 app.include_router(auth_router,          prefix=f"{API_PREFIX}/auth",          tags=["Authentication"])
 app.include_router(users_router,         prefix=f"{API_PREFIX}/users",         tags=["Users"])
